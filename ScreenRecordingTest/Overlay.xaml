@@ -1,0 +1,119 @@
+﻿    <Window x:Class="Ludio.Overlay"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Ludio.Base"
+        Loaded="Window_Loaded" 
+        mc:Ignorable="d"
+        AllowsTransparency="True" 
+        Width="1080"            
+        Height="720"
+        Topmost="True"
+        WindowState="Maximized"
+        WindowStyle="None" 
+        Background="Transparent"
+        Title="Ludio Overlay">
+    <Window.Resources>
+        <local:BitmapToImageSourceConverter x:Key="bitmapConverter"></local:BitmapToImageSourceConverter>
+        <local:DoubleBoolToVisibilityConverter x:Key="multiBoolToVis"></local:DoubleBoolToVisibilityConverter>
+        
+        <local:IsTopAligned x:Key="isTop"></local:IsTopAligned>
+        <local:IsBottomAligned x:Key="isBottom"></local:IsBottomAligned>
+        <local:IsLeftAligned x:Key="isLeft"></local:IsLeftAligned>
+        <local:IsRightAligned x:Key="isRight"></local:IsRightAligned>
+
+        <local:BoolToStaticStringConverter x:Key="boolToString" True="Images/Window/windowed.png" False="Images/Window/fullscreen.png" />
+
+        <ControlTemplate TargetType="Button" x:Key="buttonTemplate">
+            <ContentPresenter Content="{TemplateBinding Content}"/>
+        </ControlTemplate>
+    </Window.Resources>
+    <Grid>
+        <Border MaxWidth="{Binding CaptureWindow.Width}" MaxHeight="{Binding CaptureWindow.Height}" 
+                VerticalAlignment="{Binding CaptureWindow.VerticalAlignment}" HorizontalAlignment="{Binding CaptureWindow.HorizontalAlignment, UpdateSourceTrigger=PropertyChanged}" Margin="{Binding CaptureWindow.Margin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                BorderBrush="Black" BorderThickness="1" x:Name="Capture">
+            <Border BorderBrush="White" BorderThickness="1">
+                
+            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MaxWidth="{Binding CaptureWindow.Width}" MaxHeight="{Binding CaptureWindow.Height}">
+                <Image DataContext="{Binding DisplayCapture, UpdateSourceTrigger=PropertyChanged}" Source="{Binding Display, Converter={StaticResource bitmapConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                <Grid x:Name="CaptureMenu">
+                    <Button Background="Transparent" BorderBrush="Transparent" Width="25" Height="25" Margin="60, 10, 60, 10" 
+                            VerticalAlignment="{Binding Logo.VerticalAlignment}" HorizontalAlignment="{Binding Logo.HorizontalAlignment, UpdateSourceTrigger=PropertyChanged}"
+                            Template="{StaticResource buttonTemplate}" Click="Resize_Click">
+                        <Image Source="{Binding CaptureWindow.Maximized, Converter={StaticResource boolToString}}"></Image>
+                    </Button>
+                </Grid>
+
+                <Grid x:Name="ScaleCorners">
+                <Button Background="Transparent" BorderBrush="Transparent"
+                        Width="15" Height="15" Margin="2" 
+                        VerticalAlignment="Bottom" HorizontalAlignment="Left"
+                        MouseEnter="Scale_MouseEnter" MouseLeave="Scale_MouseLeave"
+                        Template="{StaticResource buttonTemplate}">
+                    <Button.Visibility>
+                        <MultiBinding Converter="{StaticResource multiBoolToVis}">
+                            <Binding ElementName="Capture" Path="HorizontalAlignment" Converter="{StaticResource isRight}"/>
+                            <Binding ElementName="Capture" Path="VerticalAlignment" Converter="{StaticResource isTop}"/>
+                        </MultiBinding>
+                    </Button.Visibility>
+                        <Image Source="Images/Window/scale_LB.png" ></Image>
+                </Button>
+                <Button Background="Transparent" BorderBrush="Transparent"
+                        Width="15" Height="15" Margin="2" 
+                        VerticalAlignment="Top" HorizontalAlignment="Left"
+                        MouseEnter="Scale_MouseEnter" MouseLeave="Scale_MouseLeave"
+                        Template="{StaticResource buttonTemplate}">
+                    <Button.Visibility>
+                        <MultiBinding Converter="{StaticResource multiBoolToVis}">
+                            <Binding ElementName="Capture" Path="HorizontalAlignment" Converter="{StaticResource isRight}"/>
+                            <Binding ElementName="Capture" Path="VerticalAlignment" Converter="{StaticResource isBottom}"/>
+                        </MultiBinding>
+                    </Button.Visibility>
+                        <Image Source="Images/Window/scale_LT.png" ></Image>
+                </Button>
+                <Button Background="Transparent" BorderBrush="Transparent"
+                        Width="15" Height="15" Margin="2" 
+                        VerticalAlignment="Top" HorizontalAlignment="Right"
+                        MouseEnter="Scale_MouseEnter" MouseLeave="Scale_MouseLeave"
+                        Template="{StaticResource buttonTemplate}">
+                    <Button.Visibility>
+                        <MultiBinding Converter="{StaticResource multiBoolToVis}">
+                            <Binding ElementName="Capture" Path="HorizontalAlignment" Converter="{StaticResource isLeft}"/>
+                            <Binding ElementName="Capture" Path="VerticalAlignment" Converter="{StaticResource isBottom}"/>
+                        </MultiBinding>
+                    </Button.Visibility>
+                    <Image Source="Images/Window/scale_RT.png" ></Image>
+                </Button>
+                <Button Background="Transparent" BorderBrush="Transparent"
+                        Width="15" Height="15" Margin="2" 
+                        VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                        MouseEnter="Scale_MouseEnter" MouseLeave="Scale_MouseLeave"
+                        Template="{StaticResource buttonTemplate}">
+
+                    <Button.Visibility>
+                        <MultiBinding Converter="{StaticResource multiBoolToVis}">
+                            <Binding ElementName="Capture" Path="HorizontalAlignment" Converter="{StaticResource isLeft}"/>
+                            <Binding ElementName="Capture" Path="VerticalAlignment" Converter="{StaticResource isTop}"/>
+                        </MultiBinding>
+                    </Button.Visibility>
+                        <Image Source="Images/Window/scale_RB.png" ></Image>
+                </Button>
+                </Grid>
+                
+            </Grid>
+            </Border>
+        </Border>
+        <Button x:Name="Logo" Background="Transparent" BorderBrush="Transparent" Width="60" Height="60"
+                VerticalAlignment="{Binding Logo.VerticalAlignment}" HorizontalAlignment="{Binding Logo.HorizontalAlignment, UpdateSourceTrigger=PropertyChanged}" Margin="{Binding Logo.Margin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                        MouseEnter="Logo_MouseEnter"  MouseLeave="Logo_MouseLeave"
+                        Template="{StaticResource buttonTemplate}">
+            <Image Source="Images/logo.png" ></Image>
+        </Button>
+        
+        <TextBlock Text="{Binding DisplayCapture.FPS}" Margin="10,10,0,0" Height="52"
+                   VerticalAlignment="Top" HorizontalAlignment="Left" Width="236" 
+                   Foreground="White" FontSize="32" Focusable="False"
+                   />
+    </Grid>
+</Window>

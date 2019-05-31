@@ -1,0 +1,95 @@
+﻿<UserControl x:Class="Ludio.Dashboard.Lobby"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:base="clr-namespace:Ludio.Base"
+             xmlns:Core="clr-namespace:Core.Data;assembly=Chronos"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+    </UserControl.Resources>
+    <Grid>
+        <StackPanel>
+            <Grid Height="50" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="Name"/>
+                <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="Role"/>
+            </Grid>
+            <ListView Background="Transparent" BorderThickness="0" ItemsSource="{Binding Channel.Users}">
+            <ListView.ItemTemplate>
+                <DataTemplate DataType="{x:Type ListViewItem}">
+                        <Grid Height="20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{Binding Name}"/>
+                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding Role}"/>
+                            <Button Grid.Column="3" Template="{StaticResource buttonTemplate}" 
+                                    Command="{Binding DataContext.OpenCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}">
+                                <Button.Visibility>
+                                    <MultiBinding Converter="{base:MultiVisibilityConverter}">
+                                        <Binding Path="ID" Converter="{base:ActiveUserToVisibility User={x:Static Core:User.I}}"/>
+                                        <Binding Path="Role" Converter="{base:UserRoleToVisibility Role={x:Static Core:Role.Host}}"/>
+                                        <Binding Path="DataContext.Channel.ChannelState" RelativeSource="{RelativeSource AncestorType=UserControl, Mode=FindAncestor}" 
+                                                 Converter="{base:ChannelStateToVisibility State={x:Static Core:ChannelState.Closed}}"/>
+                                    </MultiBinding> 
+                                </Button.Visibility>
+                                <TextBlock Text="Open"/>
+                            </Button>
+                            <Button Grid.Column="3" Template="{StaticResource buttonTemplate}" 
+                                    Command="{Binding DataContext.CloseCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}">
+                                <Button.Visibility>
+                                    <MultiBinding Converter="{base:MultiVisibilityConverter}">
+                                        <Binding Path="ID" Converter="{base:ActiveUserToVisibility User={x:Static Core:User.I}}"/>
+                                        <Binding Path="Role" Converter="{base:UserRoleToVisibility Role={x:Static Core:Role.Host}}"/>
+                                        <Binding Path="DataContext.Channel.ChannelState" RelativeSource="{RelativeSource AncestorType=UserControl, Mode=FindAncestor}" 
+                                                 Converter="{base:ChannelStateToVisibility State={x:Static Core:ChannelState.Open}}"/>
+                                    </MultiBinding>
+                                </Button.Visibility>
+                                <TextBlock Text="Close"/>
+                            </Button>
+                            <Button Grid.Column="3" Template="{StaticResource buttonTemplate}" 
+                                    Command="{Binding DataContext.JoinCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                                    CommandParameter="{Binding }">
+                                <Button.Visibility>
+                                    <MultiBinding Converter="{base:MultiVisibilityConverter}">
+                                        <Binding Path="ID" Converter="{base:ActiveUserToVisibility User={x:Static Core:User.I}}"/>
+                                        <Binding Path="DataContext.Channel.ID" RelativeSource="{RelativeSource AncestorType=UserControl, Mode=FindAncestor}" 
+                                                 Converter="{base:UserChannelToVisibility Not=True, User={x:Static Core:User.I}}"/>
+                                        <Binding Path="Role" Converter="{base:UserRoleToVisibility Not=True, Role={x:Static Core:Role.Host}}"/>
+                                        <Binding Path="DataContext.Channel.ChannelState" RelativeSource="{RelativeSource AncestorType=UserControl, Mode=FindAncestor}" 
+                                                 Converter="{base:ChannelStateToVisibility State={x:Static Core:ChannelState.Open}}"/>
+                                    </MultiBinding>
+                                </Button.Visibility>
+                                <TextBlock Text="Join"/>
+                            </Button>
+                            <Button Grid.Column="3" Template="{StaticResource buttonTemplate}" 
+                                    Command="{Binding DataContext.LeaveCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                                    CommandParameter="{Binding }">
+                                <Button.Visibility>
+                                    <MultiBinding Converter="{base:MultiVisibilityConverter}">
+                                        <Binding Path="ID" Converter="{base:ActiveUserToVisibility User={x:Static Core:User.I}}"/>
+                                        <Binding Path="DataContext.Channel.ID" RelativeSource="{RelativeSource AncestorType=UserControl, Mode=FindAncestor}" 
+                                                 Converter="{base:UserChannelToVisibility User={x:Static Core:User.I}}"/>
+                                        <Binding Path="Role" Converter="{base:UserRoleToVisibility Not=True, Role={x:Static Core:Role.Host}}"/>
+                                        <Binding Path="DataContext.Channel.ChannelState" RelativeSource="{RelativeSource AncestorType=UserControl, Mode=FindAncestor}" 
+                                                 Converter="{base:ChannelStateToVisibility State={x:Static Core:ChannelState.Open}}"/>
+                                    </MultiBinding>
+                                </Button.Visibility>
+                                <TextBlock Text="Leave"/>
+                            </Button>
+                        </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>a840bf4f-d9e9-4062-af9f-647c263c967d</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Core</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Channel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\DataObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Networking\Syncable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExtensionMethods.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Networking\Connection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Networking\Constants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Networking\IPPacket.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Networking\PacketHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\User.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Networking\TCPClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Networking\UDPClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Util\Log.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Util\Observable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Util\WeakEvent.cs" />
+  </ItemGroup>
+</Project>
